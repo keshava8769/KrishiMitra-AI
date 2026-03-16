@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme.dart';  // Fixed import path (go up two levels)
+import '../../core/theme.dart';
+import '../../services/language_service.dart';   // ✅ Added
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -79,7 +80,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Select Language / भाषा चुनें'),
-        backgroundColor: FarmColors.leafGreen,  // Using FarmColors
+        backgroundColor: FarmColors.leafGreen,
         foregroundColor: Colors.white,
       ),
       body: Container(
@@ -88,7 +89,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              FarmColors.lightGreen,  // Using FarmColors
+              FarmColors.lightGreen,
               Colors.white,
             ],
           ),
@@ -109,45 +110,46 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: isSelected
-                          ? BorderSide(color: FarmColors.leafGreen, width: 2)  // Using FarmColors
+                          ? BorderSide(color: FarmColors.leafGreen, width: 2)
                           : BorderSide.none,
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundColor: isSelected
-                            ? FarmColors.leafGreen  // Using FarmColors
-                            : FarmColors.lightGreen,  // Using FarmColors
+                            ? FarmColors.leafGreen
+                            : FarmColors.lightGreen,
                         child: Icon(
                           language['icon'],
-                          color: isSelected ? Colors.white : FarmColors.darkGreen,  // Using FarmColors
+                          color: isSelected ? Colors.white : FarmColors.darkGreen,
                         ),
                       ),
                       title: Text(
                         language['name'],
                         style: TextStyle(
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          color: isSelected ? FarmColors.darkGreen : Colors.black87,  // Using FarmColors
+                          color: isSelected ? FarmColors.darkGreen : Colors.black87,
                         ),
                       ),
                       subtitle: Text(language['native']),
                       trailing: isSelected
-                          ? Icon(Icons.check_circle, color: FarmColors.leafGreen)  // Using FarmColors
+                          ? Icon(Icons.check_circle, color: FarmColors.leafGreen)
                           : null,
-                      onTap: () {
+                      onTap: () async {      // ✅ Added async
                         setState(() {
                           _selectedLanguage = language['code'];
                         });
 
-                        // Show confirmation snackbar
+                        /// ✅ Load selected language JSON
+                        await LanguageService.loadLanguage(language['code']);
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('${language['name']} selected'),
-                            backgroundColor: FarmColors.leafGreen,  // Using FarmColors
+                            backgroundColor: FarmColors.leafGreen,
                             duration: const Duration(seconds: 1),
                           ),
                         );
 
-                        // Navigate to home after brief delay
                         Future.delayed(const Duration(milliseconds: 800), () {
                           Navigator.pushReplacementNamed(context, '/home');
                         });
@@ -158,19 +160,22 @@ class _LanguageScreenState extends State<LanguageScreen> {
               ),
             ),
 
-            // Continue button at bottom
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _selectedLanguage.isNotEmpty
-                      ? () {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  }
+                      ? () async {
+
+                          /// ✅ Load selected language
+                          await LanguageService.loadLanguage(_selectedLanguage);
+
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: FarmColors.leafGreen,  // Using FarmColors
+                    backgroundColor: FarmColors.leafGreen,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(

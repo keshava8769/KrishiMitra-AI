@@ -213,7 +213,7 @@ class _SplashScreenState extends State<SplashScreen>
           // Main content with fade transition
           FadeTransition(
             opacity: _fadeAnimation,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: double.infinity,
               child: Column(

@@ -114,8 +114,7 @@ final ThemeData appTheme = ThemeData(
   colorScheme: const ColorScheme.light(
     primary: Colors.green,
     secondary: Color(0xFFFFA726), // Orange/amber for accents (sun/farming)
-    tertiary: Color(0xFF795548), // Brown for soil
-    background: Colors.white,
+    tertiary: Color(0xFF795548),
     surface: Colors.white,
     onPrimary: Colors.white,
     onSecondary: Colors.black,

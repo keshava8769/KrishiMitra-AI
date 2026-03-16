@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'core/app_routes.dart';
 import 'screens/splash/splash_screen.dart';
+import 'services/language_service.dart';
 
-void main() {
-  // Ensure Flutter is initialized (good practice for future plugins)
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// load default language
+  await LanguageService.loadLanguage("en");
 
   runApp(const KrishiMitraApp());
 }
 
-class KrishiMitraApp extends StatelessWidget {
+class KrishiMitraApp extends StatefulWidget {
   const KrishiMitraApp({super.key});
+
+  static void setLocale(BuildContext context, String lang) async {
+    await LanguageService.loadLanguage(lang);
+
+    final state =
+        context.findAncestorStateOfType<_KrishiMitraAppState>();
+
+    state?.changeLanguage();
+  }
+
+  @override
+  State<KrishiMitraApp> createState() => _KrishiMitraAppState();
+}
+
+class _KrishiMitraAppState extends State<KrishiMitraApp> {
+
+  void changeLanguage() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +41,17 @@ class KrishiMitraApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
       initialRoute: '/splash',
-      home: const SplashScreen(), // fallback if route fails
+      home: const SplashScreen(),
 
-      // Optional enhancements you might want to add:
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        useMaterial3: true,
+      ),
 
-      // Theme customization (uncomment and modify as needed)
-      // theme: ThemeData(
-      //   primarySwatch: Colors.green, // Agriculture theme
-      //   useMaterial3: true, // Enable Material 3 design
-      //   fontFamily: 'Poppins', // If you add custom fonts later
-      // ),
-
-      // Error handling for navigation
-      onGenerateRoute: (settings) {
-        // You can add custom route generation logic here if needed
-        return null; // Falls back to routes map
-      },
-
-      // Error handling for undefined routes
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
           builder: (context) => const Scaffold(
-            body: Center(
-              child: Text('Route not found!'),
-            ),
+            body: Center(child: Text('Route not found!')),
           ),
         );
       },

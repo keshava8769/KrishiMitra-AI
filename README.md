@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🌾 KrishiMitra AI
 
 An Offline AI-Powered Agriculture Assistant built to support Indian farmers with crop disease detection, cultivation guidance, calculators, and multi-language support — completely free and usable without login.
@@ -140,4 +139,4 @@ git clone https://github.com/yourusername/krishimitra-ai.git
 cd krishimitra-ai
 flutter pub get
 flutter run
-
+```
